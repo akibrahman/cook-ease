@@ -1,0 +1,42 @@
+[
+  {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "image": "https://i.ibb.co/Zxd3sTC/Linkdin.jpg",
+    "rating": 4.5,
+    "review": "Great product! I'm very satisfied with my purchase.",
+    "mealId": "6560150c786a28c902d3d16d"
+  },
+  {
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "image": "https://i.ibb.co/Zxd3sTC/Linkdin.jpg",
+    "rating": 5.0,
+    "review": "Excellent service and fast delivery. Highly recommended!",
+    "mealId": "6560150c786a28c902d3d16d"
+  },
+  {
+    "name": "Bob Johnson",
+    "email": "bob.johnson@example.com",
+    "image": "https://i.ibb.co/Zxd3sTC/Linkdin.jpg",
+    "rating": 3.8,
+    "review": "The product quality is good, but the packaging could be improved.",
+    "mealId": "6560150c786a28c902d3d16d"
+  },
+  {
+    "name": "Alice Williams",
+    "email": "alice.williams@example.com",
+    "image": "https://i.ibb.co/Zxd3sTC/Linkdin.jpg",
+    "rating": 4.2,
+    "review": "Fast shipping and friendly customer support. Will buy again.",
+    "mealId": "6560150c786a28c902d3d16d"
+  },
+  {
+    "name": "Charlie Brown",
+    "email": "charlie.brown@example.com",
+    "image": "https://i.ibb.co/Zxd3sTC/Linkdin.jpg",
+    "rating": 4.7,
+    "review": "Impressed with the variety of products. Good value for money.",
+    "mealId": "6560150c786a28c902d3d16d"
+  }
+]
