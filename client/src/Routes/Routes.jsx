@@ -8,6 +8,7 @@ import LoginPage from "../Pages/LoginPage";
 import RegistrationPage from "../Pages/RegistrationPage";
 import UserRoute from "./UserRoute";
 import MealManagement from "../Layouts/User/MealManagement";
+import CookAlone from "../Layouts/User/CookAlone";
 
 export const routes = createBrowserRouter([
   {
@@ -50,6 +51,14 @@ export const routes = createBrowserRouter([
         element: (
           <UserRoute>
             <MealManagement />
+          </UserRoute>
+        ),
+      },
+      {
+        path: "cook-alone",
+        element: (
+          <UserRoute>
+            <CookAlone />
           </UserRoute>
         ),
       },

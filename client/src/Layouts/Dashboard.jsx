@@ -1,7 +1,7 @@
 import { CgProfile } from "react-icons/cg";
 import { FaBars } from "react-icons/fa";
 import { FaHouse } from "react-icons/fa6";
-import { GiMeal } from "react-icons/gi";
+import { GiMeal, GiRiceCooker } from "react-icons/gi";
 import { NavLink, Outlet } from "react-router-dom";
 import useRole from "../Hooks/useRole";
 
@@ -44,6 +44,12 @@ const Dashboard = () => {
                   <NavLink to="/dashboard/meal-management">
                     <GiMeal />
                     Meal Management
+                  </NavLink>
+                </li>
+                <li className="text-[#fff] font-medium">
+                  <NavLink to="/dashboard/cook-alone">
+                    <GiRiceCooker />
+                    Cook Alone
                   </NavLink>
                 </li>
               </>
