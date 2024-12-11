@@ -24,7 +24,11 @@ const Meal = ({ day, meal }) => {
         `/get-meal?userId=${queryKey[2]}&day=${queryKey[0]}&meal=${queryKey[1]}`
       );
       if (responce.data.success)
-        return { image: responce.data.image, name: responce.data.name };
+        return {
+          image: responce.data.image,
+          name: responce.data.name,
+          mealId: responce.data.mealId,
+        };
       else return null;
     },
     enabled: user && !userIsLoading ? true : false,
@@ -210,10 +214,10 @@ const Meal = ({ day, meal }) => {
     );
   else
     return (
-      <div className="relative flex flex-col items-center justify-center gap-1">
+      <div className="relative flex flex-col items-center justify-center gap-1 group">
         <div
           onClick={() => deleteMeal(day, meal, user?._id, data.mealId)}
-          className="absolute w-full h-[40%] top-0 left-0 cursor-pointer py-1 flex items-center justify-center bg-red-200"
+          className="absolute w-full h-[40%] top-0 left-0 cursor-pointer py-1 flex items-center justify-center bg-red-200 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
         >
           <MdDelete className="font-semibold text-red-500" />
         </div>

@@ -210,7 +210,7 @@ async function run() {
             msg: "Invalid Meal ID",
           });
         }
-        if (result.acknowledged) {
+        if (toDeleteMeal.acknowledged) {
           return res.json({
             success: true,
             msg: "Meal Removed successfully",
