@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -55,7 +56,7 @@ async function run() {
   try {
     //! Collections
     const usersCollection = client.db("meal-akib").collection("AllUsers");
-    const allMeals = client.db("meal-akib").collection("AllMeals");
+    const allMealsCollection = client.db("meal-akib").collection("AllMeals");
 
     //! Token Generator
     app.post("/create-jwt", async (req, res) => {
@@ -79,13 +80,6 @@ async function run() {
         .send({ success: true });
     });
 
-    //! Get Role
-    app.get("/get-role", async (req, res) => {
-      const email = req.query.email;
-      const result = await usersCollection.findOne({ email });
-      res.send(result.role);
-    });
-
     //! Get User
     app.get("/get-user", verifyToken, async (req, res) => {
       const email = req.query.email;
@@ -104,7 +98,7 @@ async function run() {
           success: false,
           msg: "Wrong UserId",
         });
-      const dbMeal = await allMeals.findOne({
+      const dbMeal = await allMealsCollection.findOne({
         day,
         meal,
         userId: new ObjectId(userId),
@@ -156,8 +150,7 @@ async function run() {
           createdAt: new Date(),
         };
 
-        const result = await allMeals.insertOne(newMeal);
-        console.log("OKKKKKKKKKKK");
+        const result = await allMealsCollection.insertOne(newMeal);
         if (result.acknowledged) {
           return res.json({
             success: true,
@@ -198,7 +191,7 @@ async function run() {
             msg: "Invalid User ID",
           });
         }
-        const toDeleteMeal = await allMeals.deleteOne({
+        const toDeleteMeal = await allMealsCollection.deleteOne({
           userId: new ObjectId(userId),
           day,
           meal,
@@ -226,6 +219,59 @@ async function run() {
         res.status(500).json({
           success: false,
           msg: "Internal server error",
+        });
+      }
+    });
+
+    //! Get Meal From Selected Meal
+    app.post("/get-meal-from-chart", verifyToken, async (req, res) => {
+      try {
+        const { searchQuery } = req.body;
+        const email = req.data.email;
+        const user = await usersCollection.findOne({ email });
+        if (!user) throw new Error("Unauthorized || E-mail Invalid From Token");
+        const addedItems = await allMealsCollection
+          .find({ userId: new ObjectId(user._id) })
+          .toArray();
+        const detailedItems = await Promise.all(
+          addedItems.map(async (item) => {
+            const apiUrl = `https://api.spoonacular.com/food/menuItems/${item.mealId}?apiKey=${process.env.SPOONACULAR_API_KEY}`;
+            try {
+              const response = await axios.get(apiUrl);
+              const { title, image } = response.data;
+              return {
+                mealId: item.mealId,
+                title,
+                image,
+              };
+            } catch (apiError) {
+              console.error(
+                `Error fetching details for mealId ${item.mealId}:`,
+                apiError.message
+              );
+              return null;
+            }
+          })
+        );
+        const filteredItems = detailedItems.filter((item) => item !== null);
+        const escapeRegex = (query) =>
+          query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+        const regex = searchQuery
+          ? new RegExp(escapeRegex(searchQuery), "i")
+          : null;
+        const finalFilteredItems = regex
+          ? filteredItems.filter((item) => regex.test(item.title))
+          : filteredItems;
+        res.json({
+          success: true,
+          items: finalFilteredItems,
+          msg: "Items Retrieved",
+        });
+      } catch (error) {
+        console.error("Error From '/get-meal-from-chart':", error);
+        res.status(500).json({
+          success: false,
+          msg: error.message || "Internal server error",
         });
       }
     });
